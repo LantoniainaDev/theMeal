@@ -241,6 +241,29 @@ footer{
     }
 }
 
+// ****** en cas d'erreur de connexion internet *****
+.alert{
+    color: #ff4f4f;
+    @include space(5px,);
+    @include flex(center,center, column );
+    border-radius: 20px;
+    border: solid 1px $font;
+
+    button{
+        $h:30px;
+        height: $h;
+        border-radius: calc($h/2);
+        background: linear-gradient(-45deg,rgba($font,.6),$font);
+        transition: .3s;
+        &:hover{
+            background: linear-gradient(-45deg,$font,rgba($font,.77));
+        }
+        &:active{
+            transform: scale(.9);
+        }
+    }
+}
+
 // ******** les keyframes **********
 @keyframes expand {
     from{

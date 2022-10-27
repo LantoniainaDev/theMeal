@@ -5,12 +5,13 @@
       <input type="search" placeholder="rechercher..." v-model="search">
       <div>  {{meals.length}} plat{{meals.length>1?'s':''}} et {{searchedMeal.length}} resultats</div>
     </span>
-    <p class="flex"><select name="categorie" id="cat" v-model="selected" @input="loadList">
+    <p v-if="catList.lenght" class="flex"><select name="categorie" id="cat" v-model="selected" @input="loadList">
       <option v-for="(categorie,i) in catList" :key="i" :value="categorie.strCategory">{{categorie.strCategory}}</option>
       </select> </p>
-    <div v-if="!loading" class="table-de-recette">
+    <div v-if="!(loading || errMessage)" class="table-de-recette">
       <Recette v-for="(meal,i) in searchedMeal" :key="i" :meal='meal' :category="selected"></Recette>
     </div>
+    <Err-log v-else-if="errMessage" :errMessage="errMessage" @action="reload"></Err-log>
     <Loading v-else></Loading>
   </div>
 </template>
@@ -28,23 +29,32 @@ export default {
       meals:[],
       loading:true,
       selected:"Vegan",
+      errMessage:"",
       catList:[],
     }
   },
   mounted(){
-    getCatList().then((data)=>this.catList = data).then(this.loadList);
+    this.reload();
   },
   computed:{
     searchedMeal(){
       return this.meals.filter(e=>{return filtreDeRecherche(e,this.search)});
-    }
+    },
   },
   methods:{
+    onErr(){this.loading =false;this.errMessage = "Erreur de connexion"},
     loadList(){
       this.loading =true;
       randMeal(this.selected).then(({data})=>this.meals =data.meals)
       .then(()=>this.loading =false)
-      .catch(()=>this.loading =false);
+      .catch(this.onErr);
+    },
+    reload(){
+    this.errMessage = "";
+    getCatList()
+      .then((data)=>this.catList = data)
+      .then(this.loadList)
+      .catch(this.onErr);
     }
   }
 }
