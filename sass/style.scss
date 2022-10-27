@@ -1,0 +1,264 @@
+@font-face {
+    font-family: "Josefin";
+    src: url("~/static/JosefinSans-Regular.ttf");
+}
+
+//des variables de couleur 
+$bg:#464646;
+$bg2:#292929;
+$font:#ffe4bb;
+$blue: #2289ff;
+
+// *** les mixins ***
+@mixin space($m:0,$p:5px) {
+    margin: $m;padding: $p;
+}
+
+@mixin flex($justify:space-around,$align:center,$dir:initial) {
+    display: flex;
+    justify-content:$justify;
+    align-items: $align;
+    flex-direction: $dir;
+}
+
+// ************ la scroll Bar *********
+::-webkit-scrollbar{
+    width: 3px;
+    background-color: #79797900;
+    &-thumb{
+        background-color:#797979;
+        border-radius: 2px;
+    }
+    height: 3px;
+}
+
+//*********** basics *************
+body,.app{
+    background-color: $bg;
+    margin: 0;padding: 0;
+    color: $font;
+}
+
+*{
+    font-size: 1.1rem;
+    font-family: "Josefin",sans-serif;
+}
+
+input[type=search],input[type=text],select{
+    $h:30px;
+    @include space(0, 5px);
+    border-radius: calc($h/2);
+    border: none;outline: none;
+}
+
+button{
+    border: none;
+    background-color: rgba($color: $bg, $alpha: 0);
+    color: inherit;
+    cursor: pointer;
+}
+
+input[type=checkbox]{
+    display: none;
+    
+    & + label{
+        background-color: rgba($color: $bg, $alpha: 0);
+        cursor: pointer;
+        transition: .3s;
+        position: relative;
+    }
+
+
+    &:checked +label{
+        &[class=love]{
+            color: red;
+        }
+        &[class=wish]{
+            color: red;
+            transform: rotate(-45deg);
+        }
+    }
+
+}
+
+a{
+    //les couleur des liens
+    $c1:#2289ff;
+    $c2: #2289ff9d;
+    transition: .3s;
+    @include space(0);
+    text-decoration: none;
+    color: $c2;
+    
+    &:hover,&.nuxt-link-exact-active{
+        color: $c1;
+
+        &::after{
+            transform: scaleX(1);
+        }
+    }
+    &:hover{
+        font-weight: bolder;
+    }
+    &:active{
+        transform: scale(.7);
+    }
+
+    &::after{
+        content: " ";
+        display: block;
+        height: 2px;width: 100%;
+        border-radius: 2px;
+        background-color: $c1;
+        transform: scaleX(0);
+        transition: .6s;
+    }
+}
+
+img{
+    background: url("~/static/u55lbp1585564013.jpg") center/cover no-repeat;
+    min-height:200px;
+}
+
+// ***** classes utiles *************
+.flex{
+    @include flex( );
+    flex-wrap: wrap;
+}
+
+//************ header et footer *************
+header{
+    background-color: $bg2;
+    width: 100%; height: 2rem;
+    @include space( );
+    @include flex();
+
+    nav{
+        @include flex();
+
+    }
+
+}
+
+footer{
+    color: rgb(255, 255, 255);
+    @include space(0 ,5px );
+    @include flex();
+    background: linear-gradient(-45deg, #000016 , #00003d)
+}
+
+//*********** table de recette et etc *************
+.table-de-recette{
+    @include flex();
+    flex-wrap: wrap;
+
+}
+
+.carte{
+    @include space(5px, 3px);
+    @include flex(center, stretch, column);
+    box-shadow: 1px 4px 9px 1px black;
+    border-radius: 3px;
+    width: 200px;
+    max-width: 100%;
+    
+    position: relative;
+    .flotant{
+        box-sizing:border-box;
+        @include flex(center, stretch, column);
+        @include space(0, 10px);
+        position: absolute;
+        top: 2px;left: 0%;width: 100%;
+        background: linear-gradient(#020202ce 0,#02020200 100%);
+        border-radius: 3px;
+        opacity: 0;
+        transition: .2s opacity transform;
+        transition: 1s color;
+        color: rgba($color: $font, $alpha: 0);
+    }
+
+    &:hover {
+        .flotant{
+            color: rgba($color: $font, $alpha: 1);
+            opacity: 1;
+        }
+    }
+}
+
+    
+.instruction{
+    line-clamp: 3;
+    max-height: 7rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow-y: hidden;
+}
+
+//********** recherche ********
+.search-container{
+    @include space(0 , 4px);
+    @include flex(center, center);
+}
+
+//********* preparation *********
+
+.preparation{
+    height: calc(100%);
+    width:100vw;margin: 0;
+    @include flex(center, center, column);
+
+    &-view{
+        @include space(40px 0, 10px);
+        width: calc(80%);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        box-shadow: -1px 2px 7px 2px #040416;
+
+        ul{
+            animation: expand 2s forwards;
+        }
+    }
+
+}
+
+// **** loading component *********
+.loading{
+    @include flex(center, center, column);
+    .txt{
+        color: black;
+    }
+
+    .round{
+        $s : 30px;
+        display: block;
+        width: $s; height: $s;
+        border-radius: 50%;
+        border: solid 3px grey;
+        border-bottom: solid 4px #61ff22;
+        border-top: solid 4px #61ff22;
+        animation: rotate 2s infinite;
+    }
+}
+
+// ******** les keyframes **********
+@keyframes expand {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
