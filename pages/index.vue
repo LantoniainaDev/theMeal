@@ -20,6 +20,7 @@
 <script>
 import { getCatList, randMeal } from '~/static/fetcher';
 import { filtreDeRecherche } from "~/static/searcher";
+import { mapMutations } from "vuex";
 
 export default {
   name: 'IndexPage',
@@ -34,6 +35,7 @@ export default {
     }
   },
   mounted(){
+    this.initState();
     this.reload();
   },
   computed:{
@@ -58,7 +60,8 @@ export default {
       return randMeal(value).then(({data})=>this.meals =data.meals)
       .then(()=>this.loading =false)
       .catch(this.onErr);
-    }
+    },
+    ...mapMutations({initState:"INIT_STATE"})
   }
 }
 </script>

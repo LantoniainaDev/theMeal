@@ -3,7 +3,7 @@
         <Entete></Entete>
         <p class="centered"><input type="search" placeholder="chercher..."> Vous avez {{favorites.length}} {{namer}}</p>
         <Err-log v-if="errMsg" :errMessage="errMsg"></Err-log>
-        <div v-else-if="favorites.length" class="flex">
+        <div v-else-if="favorites.length !== 0" class="flex">
             <Recette v-for="(meal) in meals.filter(({idMeal})=>favorites.includes(idMeal))" :key="meal.idMeal" :meal="meal"></Recette>
         </div>
         <div v-else class="flex">

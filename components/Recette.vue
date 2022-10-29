@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapMutations,mapGetters } from "vuex";
+import { mapMutations,mapState } from "vuex";
 
 export default {
     name: "carte",
@@ -37,7 +37,7 @@ export default {
     },
     methods:{
         ...mapMutations({love:"SET_FAVORITE",wish:"SET_WISH"}),
-        ...mapGetters(["favorites","wishes"]),
+        ...mapState(["favorites","wishes"]),
     },
 }
 </script>

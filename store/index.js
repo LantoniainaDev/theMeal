@@ -2,6 +2,7 @@ const mutations = {
     SET_FAVORITE(state,id){setUp("favorites",{state,id})},
     SET_WISH(state,id){setUp("wishes",{state,id})},
     INIT_STATE(state){
+        console.log("navigator");
         ["favorites","wishes"].map(i=>{
             var tab = localStorage.getItem(i);
             if (!tab) tab = [];
@@ -12,11 +13,13 @@ const mutations = {
 }
 
 const getters = {
-    favorites(){
-        return get("favorites");
+    favorites(store){
+        // return get("favorites");
+        return store.favorites;
     },
-    wishes(){
-        return get("wishes");
+    wishes(store){
+        // return get("wishes");
+        return store.wishes;
     }
 }
 
@@ -36,11 +39,6 @@ function setUp(prop,{state,id}) {
     localStorage.setItem(prop,tab);
     state[prop] = tab;
     return "done";
-}
-
-function get(prop) {
-    var tab = localStorage.getItem(prop);
-    return tab? tab.split(","):[];
 }
 
 export default {

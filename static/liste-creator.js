@@ -1,5 +1,5 @@
 
-import { mapGetters } from "vuex";
+import { mapState,mapMutations } from "vuex";
 import { searchById } from '~/static/fetcher';
 
 export default function (namer,storeName) {
@@ -15,7 +15,7 @@ export default function (namer,storeName) {
         }
     },
     computed:{
-        ...mapGetters({favorites:storeName}),
+        ...mapState({favorites:storeName}),
     },
     methods:{
         pushData(id){
@@ -25,9 +25,10 @@ export default function (namer,storeName) {
                 .push(data)
             })
         },
+        ...mapMutations({initState:"INIT_STATE"}),
     },
     mounted(){
-        // this.initState();
+        this.initState();
         this.favorites.map(id=>{
             this.pushData(id).catch(()=>this.errMsg = "Erreur de réseau");
         })
