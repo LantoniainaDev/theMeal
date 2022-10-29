@@ -5,7 +5,7 @@
       <input type="search" placeholder="rechercher..." v-model="search">
       <div>  {{meals.length}} plat{{meals.length>1?'s':''}} et {{searchedMeal.length}} resultats</div>
     </span>
-    <p v-if="catList.lenght" class="flex"><select name="categorie" id="cat" v-model="selected" @input="loadList">
+    <p v-if="catList.length" class="flex"><select name="categorie" id="cat" v-model="selected" @input="({target})=>loadListe(target.value)">
       <option v-for="(categorie,i) in catList" :key="i" :value="categorie.strCategory">{{categorie.strCategory}}</option>
       </select> </p>
     <div v-if="!(loading || errMessage)" class="table-de-recette">
@@ -28,7 +28,7 @@ export default {
       search:"",
       meals:[],
       loading:true,
-      selected:"Vegan",
+      selected:"Dessert",
       errMessage:"",
       catList:[],
     }
@@ -39,21 +39,24 @@ export default {
   computed:{
     searchedMeal(){
       return this.meals.filter(e=>{return filtreDeRecherche(e,this.search)});
-    },
+    }
   },
   methods:{
     onErr(){this.loading =false;this.errMessage = "Erreur de connexion"},
     loadList(){
-      this.loading =true;
-      randMeal(this.selected).then(({data})=>this.meals =data.meals)
-      .then(()=>this.loading =false)
-      .catch(this.onErr);
+      return this.loadListe(this.selected);
     },
     reload(){
     this.errMessage = "";
     getCatList()
       .then((data)=>this.catList = data)
       .then(this.loadList)
+      .catch(this.onErr);
+    },
+    loadListe(value){
+      this.loading =true;
+      return randMeal(value).then(({data})=>this.meals =data.meals)
+      .then(()=>this.loading =false)
       .catch(this.onErr);
     }
   }
